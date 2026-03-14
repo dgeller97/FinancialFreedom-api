@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: financial-freedom-api
+Version: 0.1.0
+Summary: Litestar API for the Financial Freedom budgeting app.
+Requires-Python: >=3.11
+Requires-Dist: litestar[standard]>=2.18.0
+Requires-Dist: psycopg[binary]>=3.2.0
+Requires-Dist: python-dotenv>=1.0.1
+Requires-Dist: httpx>=0.28.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.4.0; extra == "dev"
