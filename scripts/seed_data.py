@@ -1,0 +1,1 @@
+# Put the seed script here based on the first screens and API endpoints developed
