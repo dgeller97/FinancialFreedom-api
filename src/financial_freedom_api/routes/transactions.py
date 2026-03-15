@@ -1,36 +1,30 @@
 from __future__ import annotations
 
 from litestar import delete, get, patch, post
-from litestar.exceptions import NotFoundException
+from supabase import AsyncClient
 
+from .. import services
 from ..dtos import TransactionDTO, TransactionUpsertDTO
-from ..services import store
 
 
 @get("/transactions")
-async def list_transactions() -> list[TransactionDTO]:
-    return store.list_transactions()
+async def list_transactions(client: AsyncClient) -> list[TransactionDTO]:
+    return await services.list_transactions(client)
 
 
 @post("/transactions")
-async def create_transaction(data: TransactionUpsertDTO) -> TransactionDTO:
-    return store.create_transaction(data)
+async def create_transaction(client: AsyncClient, data: TransactionUpsertDTO) -> TransactionDTO:
+    return await services.create_transaction(client, data)
 
 
 @patch("/transactions/{transaction_id:str}")
-async def update_transaction(transaction_id: str, data: TransactionUpsertDTO) -> TransactionDTO:
-    try:
-        return store.update_transaction(transaction_id, data)
-    except KeyError as exc:
-        raise NotFoundException(detail=f"Transaction '{transaction_id}' was not found") from exc
+async def update_transaction(client: AsyncClient, transaction_id: str, data: TransactionUpsertDTO) -> TransactionDTO:
+    return await services.update_transaction(client, transaction_id, data)
 
 
 @delete("/transactions/{transaction_id:str}", status_code=204)
-async def delete_transaction(transaction_id: str) -> None:
-    try:
-        store.delete_transaction(transaction_id)
-    except KeyError as exc:
-        raise NotFoundException(detail=f"Transaction '{transaction_id}' was not found") from exc
+async def delete_transaction(client: AsyncClient, transaction_id: str) -> None:
+    await services.delete_transaction(client, transaction_id)
 
 
 transaction_handlers = [
